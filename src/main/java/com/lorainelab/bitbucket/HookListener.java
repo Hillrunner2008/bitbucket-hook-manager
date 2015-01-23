@@ -24,9 +24,9 @@ import org.slf4j.LoggerFactory;
  */
 @Path("/")
 public class HookListener {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(HookListener.class);
-    private ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+    private final ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 
     @Path("/")
     @POST
@@ -36,13 +36,12 @@ public class HookListener {
     public Response doSomething(@Context HttpServletRequest request, InputStream requestBody) {
         try {
             String rawPostBodyContent = CharStreams.toString(new InputStreamReader(requestBody, "UTF-8"));
-
             BitbucketPost post = mapper.readValue(rawPostBodyContent, BitbucketPost.class);
             logger.info(post.getCommits().get(0).getBranch());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error("error reading post from bitbucket");
         }
         return Response.ok().build();
     }
-
+    
 }
