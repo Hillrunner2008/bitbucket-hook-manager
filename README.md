@@ -1,1 +1,1 @@
-### A tiny project to intercept bitbucket hook and selectively call jenkins jobs based on the parsed json content sent by bitbucket.
+### A tiny project to intercept a bitbucket hook and selectively call jenkins jobs based on the parsed json content sent by bitbucket.
