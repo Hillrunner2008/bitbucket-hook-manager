@@ -1,0 +1,38 @@
+{
+    "repository": {
+        "website": "",
+        "fork": false,
+        "name": "Integrated Genome Browser",
+        "scm": "git",
+        "owner": "lorainelab",
+        "absolute_url": "/lorainelab/integrated-genome-browser/",
+        "slug": "integrated-genome-browser",
+        "is_private": false
+    },
+    "truncated": false,
+    "commits": [
+        {
+            "node": "935b5bf37c9f",
+            "files": [
+                {
+                    "type": "modified",
+                    "file": "README.md"
+                }
+            ],
+            "raw_author": "hillrunner2008 <Hillrunner2008@gmail.com>",
+            "utctimestamp": "2015-01-24 01:47:43+00:00",
+            "author": "hillrunner2008",
+            "timestamp": "2015-01-24 02:47:43",
+            "raw_node": "935b5bf37c9fa4463382c853c497dbc5c2956136",
+            "parents": [
+                "935059831c45"
+            ],
+            "branch": "master",
+            "message": "README.md edited online with Bitbucket",
+            "revision": null,
+            "size": -1
+        }
+    ],
+    "canon_url": "https://bitbucket.org",
+    "user": "hillrunner2008"
+}
