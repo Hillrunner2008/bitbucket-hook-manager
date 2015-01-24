@@ -30,7 +30,7 @@ public class HookListener {
     private static final Logger logger = LoggerFactory.getLogger(HookListener.class);
     private static final String CURRENT_DEV_BRANCH_NAME = "igb_8_4";
     private static final String MASTER_BRANCH = "master";
-    private static final String BASE_HOOK_URL = "http://eos.transvar.org/jenkins/buildByToken/build?job=";
+    private static final String BASE_HOOK_URL = "http://eos.transvar.org/jenkins/buildByToken/";
     private static final String DEVELOPMENT_BRANCH_JOB_NAME = "Development_Branch";
     private static final String MASTER_BRANCH_JOB_NAME = "Release_Branch";
 
@@ -45,14 +45,16 @@ public class HookListener {
         try {
             String urlEncodedPost = CharStreams.toString(new InputStreamReader(requestBody, "UTF-8"));
             String rawPostBodyContent = java.net.URLDecoder.decode(urlEncodedPost.substring(8), "UTF-8");
-            BitbucketPost post = mapper.readValue(rawPostBodyContent.substring(7), BitbucketPost.class);
+            BitbucketPost post = mapper.readValue(rawPostBodyContent, BitbucketPost.class);
             String branchName = post.getCommits().get(0).getBranch();
 
             switch (branchName) {
                 case CURRENT_DEV_BRANCH_NAME:
+                    logger.info("Triggering Development Branch Jenkins Build");
                     handleDevelopmentBranch();
                     break;
                 case MASTER_BRANCH:
+                    logger.info("Triggering Master Branch Jenkins Build");
                     handleMasterBranch();
             }
         } catch (IOException ex) {
@@ -62,12 +64,12 @@ public class HookListener {
     }
 
     private void handleDevelopmentBranch() {
-        String url = BASE_HOOK_URL + DEVELOPMENT_BRANCH_JOB_NAME + "&token=e0064f53b8c";
+        String url = BASE_HOOK_URL + "build?job=" + DEVELOPMENT_BRANCH_JOB_NAME + "&token=e0064f53b8c";
         sendGetRequest(url);
     }
 
     private void handleMasterBranch() {
-        String url = BASE_HOOK_URL + MASTER_BRANCH_JOB_NAME + "&token=cz5tvwjo4k";
+        String url = BASE_HOOK_URL + "/buildWithParameters?job=" + MASTER_BRANCH_JOB_NAME + "&token=cz5tvwjo4k";
         sendGetRequest(url);
     }
 
