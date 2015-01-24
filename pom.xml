@@ -7,7 +7,10 @@
     <version>1.0.0</version>
     <packaging>war</packaging>
     <name>Bitbucket Hook Manager</name>
-    <description>A tiny project to intercept bitbucket hook and selectively call jenkins jobs, currently bitbucket does not support branch specific hooks.</description>
+    <description>
+        A tiny project to intercept bitbucket hook and selectively call jenkins jobs, 
+        currently there is no jenkins plugin which will parse branch information from bitbucket.
+    </description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
