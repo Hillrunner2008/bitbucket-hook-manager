@@ -42,11 +42,14 @@ public class HookListener {
     @Consumes(MediaType.WILDCARD)
     @Produces(MediaType.WILDCARD)
     public Response processHook(@Context HttpServletRequest request, InputStream requestBody) {
+        BitbucketPost post = null;
+        String rawPostBodyContent = null;
+        String urlEncodedPost = null;
         try {
-            String urlEncodedPost = CharStreams.toString(new InputStreamReader(requestBody, "UTF-8"));
-            String rawPostBodyContent = java.net.URLDecoder.decode(urlEncodedPost.substring(8), "UTF-8");
-            BitbucketPost post = mapper.readValue(rawPostBodyContent, BitbucketPost.class);
-            String branchName = post.getCommits().get(0).getBranch();
+            urlEncodedPost = CharStreams.toString(new InputStreamReader(requestBody, "UTF-8"));
+            rawPostBodyContent = java.net.URLDecoder.decode(urlEncodedPost.substring(8), "UTF-8");
+            post = mapper.readValue(rawPostBodyContent, BitbucketPost.class);
+            String branchName = getBranchName(post);
 
             switch (branchName) {
                 case CURRENT_DEV_BRANCH_NAME:
@@ -57,10 +60,19 @@ public class HookListener {
                     logger.info("Triggering Master Branch Jenkins Build");
                     handleMasterBranch();
             }
-        } catch (IOException ex) {
-            logger.error("error reading post from bitbucket");
+
+        } catch (IOException | IllegalStateException ex) {
+            logger.error("error reading post from bitbucket", post.toString(), rawPostBodyContent);
         }
         return Response.ok().build();
+    }
+
+    private static String getBranchName(BitbucketPost post) throws IllegalStateException {
+        if (!post.getCommits().isEmpty()) {
+            return post.getCommits().get(0).getBranch();
+        } else {
+            throw new IllegalStateException("Post contains no commits, so no branch name can be found");
+        }
     }
 
     private void handleDevelopmentBranch() {
