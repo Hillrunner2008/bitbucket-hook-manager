@@ -1,8 +1,10 @@
 package com.lorainelab.bitbucket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 import com.lorainelab.bitbucket.json.model.BitbucketPost;
+import com.lorainelab.bitbucket.json.model.Commit;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -69,7 +71,12 @@ public class HookListener {
 
     private static String getBranchName(BitbucketPost post) throws IllegalStateException {
         if (!post.getCommits().isEmpty()) {
-            return post.getCommits().get(0).getBranch();
+            for (Commit commit : post.getCommits()) {
+                if (!Strings.isNullOrEmpty(commit.getBranch())) {
+                    return commit.getBranch();
+                }
+            }
+            throw new IllegalStateException("Post contains no commits with branch information");
         } else {
             throw new IllegalStateException("Post contains no commits, so no branch name can be found");
         }
