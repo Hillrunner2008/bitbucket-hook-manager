@@ -62,7 +62,7 @@ public class HookListener {
             }
 
         } catch (IOException | IllegalStateException ex) {
-            logger.error("error reading post from bitbucket", post.toString(), rawPostBodyContent);
+            logger.error("error reading post from bitbucket", post.toString(), rawPostBodyContent, ex);
         }
         return Response.ok().build();
     }
