@@ -76,7 +76,8 @@ public class HookListener {
                     return commit.getBranch();
                 }
             }
-            throw new IllegalStateException("Post contains no commits with branch information");
+            logger.warn("Post contains no commits with branch information, defaulting to master branch build trigger");
+            return MASTER_BRANCH;
         } else {
             throw new IllegalStateException("Post contains no commits, so no branch name can be found");
         }
